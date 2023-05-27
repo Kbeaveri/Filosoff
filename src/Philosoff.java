@@ -7,27 +7,26 @@ public class Philosoff implements Runnable {
         this.rightFork = right;
     }
 
-    private void doAction(String action) throws InterruptedException {
-        System.out.println(Thread.currentThread().getName() + " " + action);
-        Thread.sleep(((int) (Math.random()*5000)));
-    }
-
-    @java.lang.Override
+    @Override
     public void run() {
         try{
             while(true){
-                doAction(": Думает");
+                waiter("Думает");
                 synchronized (leftFork) {
-                    doAction(": Взял левую вилку");
+                    waiter("Взял левую вилку");
                     synchronized (rightFork) {
-                        doAction(": Взял правую вилку и начал есть");
-                        doAction(": Положил правую вилку");
+                        waiter("Взял правую вилку и начал есть");
+                        waiter("Положил правую вилку");
                     }
-                    doAction(": Положил левую вилку и вернулся к размышлением");
+                    waiter("Положил левую вилку и вернулся к размышлением");
                 }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+    private void waiter(String action) throws InterruptedException {
+        System.out.println(Thread.currentThread().getName() + " " + action);
+        Thread.sleep(((int) (Math.random()*5000)));
     }
 }
